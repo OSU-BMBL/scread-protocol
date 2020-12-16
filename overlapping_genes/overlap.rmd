@@ -1,0 +1,217 @@
+---
+title: "scREAD overlapping DEGs"
+author: "Cankun Wang"
+date: "`r format(Sys.time(), '%m/%d/%Y')`"
+output: 
+  html_document:
+    toc: true
+    toc_float: false
+    number_sections: true
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F)
+library(tidyverse)
+library(rlist)
+library(tools)
+library(RVenn)
+library(rjson)
+
+# modify your directory
+knitr::opts_knit$set(root.dir = "C:/Users/flyku/Documents/GitHub/scread-protocol/overlapping_genes")
+setwd("C:/Users/flyku/Documents/GitHub/scread-protocol/overlapping_genes")
+
+```
+
+
+
+```{r,echo=F,eval=T,message=F,warning=F,error=F}
+#### 
+#
+load("scread_db.rdata")
+source("overlap_functions.R")
+####
+#de_meta <- de_meta[1:317,]
+#dataset <- dataset[1:73,]
+#save.image("scread_db.rdata")
+```
+
+
+```{r,echo=F,eval=T,message=FALSE,warning=F}
+# GLOBAL LIST
+
+REGION_LIST <- sort(unique(dataset$region))
+CT_LIST <- sort(unique(cell_type_meta$cell_type))
+CT_SHORT_LIST <- CT_LIST
+CT_SHORT_LIST[CT_LIST=="Oligodendrocyte precursor cells"] <- "opc"
+CT_SHORT_LIST <- tolower(substr(CT_SHORT_LIST, 1, 3))
+
+
+```
+
+# Overview
+
+To calculate overlapping genes, these parameters are needed
+
+The number of top genes in each AD vs control DE results (default=100)
+
+Species (default=Human)
+
+Brain region (e.g,Entorhinal Cortex)
+
+DE direction (e.g, up)
+
+Overlap threshold (for example, a gene is an overlapping gene if a should at least appeared 3 times in total 4 comparisons. Here the threshold=3)
+
+Each section has two table: 
+
+1. The overlapping genes in the selected region
+
+2. The ranking information from the overlapping genes
+
+# Human - Up-regulated
+
+## Entorhinal Cortex
+
+```{r,echo=F,eval=T,message=FALSE,warning=F}
+# Settings
+TOP <- 100
+this_species <- 'Human'
+this_region <- REGION_LIST[5]
+this_direction <- 'up'
+OVERLAP_THRES <- 3
+res <- calc_overlap_list()
+DT::datatable(res$list, filter = "top")
+DT::datatable(res$rank, filter = "top")
+
+```
+
+
+## Prefrontal cortex
+
+```{r,echo=F,eval=T,message=FALSE,warning=F}
+
+# Settings
+TOP <- 100
+this_species <- 'Human'
+this_region <- REGION_LIST[7]
+this_direction <- 'up'
+OVERLAP_THRES <- 4
+res <- calc_overlap_list()
+DT::datatable(res$list, filter = "top")
+DT::datatable(res$rank, filter = "top")
+```
+
+
+
+## Superior frontal gyrus (BA8)
+
+```{r,echo=F,eval=T,message=FALSE,warning=F}
+
+# Settings
+TOP <- 100
+this_species <- 'Human'
+this_region <- REGION_LIST[9]
+this_direction <- 'up'
+OVERLAP_THRES <- 2
+res <- calc_overlap_list()
+DT::datatable(res$list, filter = "top")
+DT::datatable(res$rank, filter = "top")
+
+```
+
+
+## Superior parietal lobe
+
+```{r,echo=F,eval=T,message=FALSE,warning=F}
+
+# Settings
+TOP <- 100
+this_species <- 'Human'
+this_region <- REGION_LIST[10]
+this_direction <- 'up'
+OVERLAP_THRES <- 2
+res <- calc_overlap_list()
+DT::datatable(res$list, filter = "top")
+DT::datatable(res$rank, filter = "top")
+
+```
+
+
+
+# Human - Down-regulated
+
+## Entorhinal Cortex
+
+```{r,echo=F,eval=T,message=FALSE,warning=F}
+# Settings
+TOP <- 100
+this_species <- 'Human'
+this_region <- REGION_LIST[5]
+this_direction <- 'down'
+OVERLAP_THRES <- 3
+res <- calc_overlap_list()
+DT::datatable(res$list, filter = "top")
+DT::datatable(res$rank, filter = "top")
+
+```
+
+
+## Prefrontal cortex
+
+```{r,echo=F,eval=T,message=FALSE,warning=F}
+
+# Settings
+TOP <- 100
+this_species <- 'Human'
+this_region <- REGION_LIST[7]
+this_direction <- 'down'
+OVERLAP_THRES <- 4
+res <- calc_overlap_list()
+DT::datatable(res$list, filter = "top")
+DT::datatable(res$rank, filter = "top")
+```
+
+
+
+## Superior frontal gyrus (BA8)
+
+```{r,echo=F,eval=T,message=FALSE,warning=F}
+
+# Settings
+TOP <- 100
+this_species <- 'Human'
+this_region <- REGION_LIST[9]
+this_direction <- 'down'
+OVERLAP_THRES <- 2
+res <- calc_overlap_list()
+DT::datatable(res$list, filter = "top")
+DT::datatable(res$rank, filter = "top")
+
+```
+
+
+## Superior parietal lobe
+
+```{r,echo=F,eval=T,message=FALSE,warning=F}
+
+# Settings
+TOP <- 100
+this_species <- 'Human'
+this_region <- REGION_LIST[10]
+this_direction <- 'down'
+OVERLAP_THRES <- 2
+res <- calc_overlap_list()
+DT::datatable(res$list, filter = "top")
+DT::datatable(res$rank, filter = "top")
+
+```
+
+
+
+# Session Infomation
+
+```{r}
+sessionInfo()
+```
