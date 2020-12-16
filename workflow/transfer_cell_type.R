@@ -20,11 +20,8 @@ suppressPackageStartupMessages(library(Polychrome))
 suppressPackageStartupMessages(library(ggplot2))
 suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(harmony))
-suppressPackageStartupMessages(library(cowplot))
-suppressPackageStartupMessages(library(future))
-suppressPackageStartupMessages(library(clusterProfiler))
-suppressPackageStartupMessages(library(org.Mm.eg.db))
-
+#suppressPackageStartupMessages(library(cowplot))
+#suppressPackageStartupMessages(library(future))
 
 
 ## Do not use it, not working in OSC clusters
@@ -42,9 +39,9 @@ disease_data_id <- args[4] # disease data ID
 load_test_data <- function(){
   # This function is used for testing, set wd to your working directory
   rm(list = ls(all = TRUE))
-  wd <- 'C:/Users/flyku/Desktop/script'
+  wd <- 'C:/Users/flyku/Documents/GitHub/scread-protocol/workflow'
   control_filename <- "control_example.rds"
-  disease_filename <- "example_disease.fst"
+  disease_filename <- "example_disease.csv"
   disease_data_id <- "disease_example"
 }
 
@@ -54,36 +51,12 @@ source("functions.R")
 
 ####### Load raw files
 health.obj <- read_rds(control_filename)
-disease_matrix <- read.fst(disease_filename)
+disease_matrix <- read.csv(disease_filename)
+
 rownames(disease_matrix) <- NULL
+disease_matrix <- column_to_rownames(disease_matrix, var = "X")
+disease.obj <- CreateSeuratObject(disease_matrix, project = "all", min.cells = 5)
 
-get_rowname_type <- function (l, db){
-  res1 <- tryCatch(nrow(AnnotationDbi::select(db, keys = l, columns = c("ENTREZID", "SYMBOL","ENSEMBL","ENSEMBLTRANS"),keytype = "SYMBOL")),error = function(e) 0)
-  res2 <- tryCatch(nrow(AnnotationDbi::select(db, keys = l, columns = c("ENTREZID", "SYMBOL","ENSEMBL","ENSEMBLTRANS"),keytype = "ENSEMBL")),error = function(e) 0)
-  res3 <- tryCatch(nrow(AnnotationDbi::select(db, keys = l, columns = c("ENTREZID", "SYMBOL","ENSEMBL","ENSEMBLTRANS"),keytype = "ENTREZID")),error = function(e) 0)
-  res4 <- tryCatch(nrow(AnnotationDbi::select(db, keys = l, columns = c("ENTREZID", "SYMBOL","ENSEMBL","ENSEMBLTRANS"),keytype = "ENSEMBLTRANS")),error = function(e) 0)
-  result <- c("error","SYMBOL","ENSEMBL","ENTREZID","ENSEMBLTRANS")
-  result_vec <- c(1,res1,res2,res3,res4)
-  return(c(result[which.max(result_vec)],result_vec[which.max(result_vec)]))
-  #write("No matched gene identifier found, please check your data.",file=paste(jobid,"_error.txt",sep=""),append=TRUE)
-}
-
-disease_gene_type <- get_rowname_type(disease_matrix$X1, org.Mm.eg.db)[1]
-
-# Detect gene ID type, most dataset use gene symbols, in case some dataset use Ensembl IDs
-if(disease_gene_type == "ENSEMBL") {
-  all_match <- bitr(disease_matrix$X1, fromType="ENSEMBL", toType="SYMBOL", OrgDb="org.Mm.eg.db")
-  expFile <- merge(disease_matrix,all_match,by.x=1,by.y=1)
-  expFile <- na.omit(expFile)
-  rownames(expFile) <- NULL
-  expFile <- expFile[,-1]
-  expFile <- aggregate(. ~ SYMBOL, expFile, sum)
-  expFile <- column_to_rownames(expFile, var = "SYMBOL")
-  disease.obj <- CreateSeuratObject(expFile, project = "all", min.cells = 5)
-} else {
-  disease_matrix <- column_to_rownames(disease_matrix, var = "X1")
-  disease.obj <- CreateSeuratObject(disease_matrix, project = "all", min.cells = 5)
-}
 
 # Preview control object cell types
 #Idents(health.obj) <- health.obj$predicted.id
@@ -232,10 +205,9 @@ dstage.obj <- FindVariableFeatures(dstage.obj, selection.method = "vst", nfeatur
 dstage.obj.gene <- rownames(dstage.obj)
 dstage.obj <- ScaleData(dstage.obj, features = dstage.obj.gene)
 dstage.obj <- RunPCA(dstage.obj, features = VariableFeatures(object = dstage.obj))
-#dstage.obj <- RunLSI(dstage.obj, n = 50, scale.max = NULL, verbose = TRUE)
 dstage.obj <- RunUMAP(dstage.obj, reduction = "pca", dims = 1:25)
 
-#gc()
+
 ## FindTransferAnchors: We recommend using PCA when reference and query datasets are from scRNA-seq
 transfer.anchors <- FindTransferAnchors(reference = health.obj, query = dstage.obj, features = VariableFeatures(object = health.obj), reduction = "pcaproject",verbose = TRUE)
 
@@ -245,21 +217,7 @@ if(nrow(transfer.anchors@anchors) > 30) {
   celltype.predictions <- TransferData(anchorset = transfer.anchors, refdata = health.obj$predicted.id, weight.reduction = dstage.obj[["pca"]],l2.norm = FALSE,dims = 1:25, k.weight = (nrow(transfer.anchors@anchors)-1))
 }
 
-#celltype.predictions <- as.factor(dstage.obj$orig.ident)
-#levels(celltype.predictions) <- 'Excitatory neurons'
-#dstage.obj <- AddMetaData(dstage.obj, metadata = celltype.predictions, col.name = 'predicted.id')
-
 dstage.obj <- AddMetaData(dstage.obj, metadata = celltype.predictions)
-
-####### Visualize LSI predicted cell types (works for Mathy's data)
-#Idents(dstage.obj) <- dstage.obj$cell_type
-#p1 <- Plot.cluster2D(dstage.obj, reduction.method = "umap",pt_size = 0.2,txt = "Provided cell type")
-#
-#Idents(dstage.obj) <- dstage.obj$predicted.id
-#p2 <- Plot.cluster2D(dstage.obj, reduction.method = "umap",pt_size = 0.2,txt = "Predicted cell type")
-#library(igraph)
-#igraph::compare(as.factor(dstage.obj$cell_type),as.factor(dstage.obj$predicted.id),method="adjusted.rand")
-#plot_grid(p1,p2)
 
 Idents(health.obj) <- health.obj$predicted.id
 p1 <- Plot.cluster2D(health.obj, reduction.method = "umap",pt_size = 0.4,txt = "Control cell type")

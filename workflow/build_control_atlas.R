@@ -2,7 +2,7 @@
 # This document aims to build control (healthy) cells atlas Seurat object from count matrix file, 
 options(check.names=FALSE)
 options(future.globals.maxSize = 8000 * 1024^2)
-suppressPackageStartupMessages(library(fst))
+#suppressPackageStartupMessages(library(fst))
 suppressPackageStartupMessages(library(Seurat))
 suppressPackageStartupMessages(library(RColorBrewer))
 suppressPackageStartupMessages(library(Polychrome))
@@ -28,8 +28,8 @@ data_id <- args[3] # unique data id
 load_test_data <- function(){
   # This function is used for testing, set wd to your working directory
   rm(list = ls(all = TRUE))
-  wd <- "C:/Users/flyku/Desktop/script"
-  expr_file = "example_control.fst"
+  wd <- 'C:/Users/flyku/Documents/GitHub/scread-protocol/workflow'
+  expr_file = "example_control.csv"
   data_id <- 'control_example'
 }
 
@@ -39,9 +39,9 @@ signatures  <- preprocess.signatures('custom_marker.csv')
 cell_type_name <- c('Astrocytes', 'Endothelial cells','Excitatory neurons','Inhibitory neurons','Microglia','Oligodendrocytes','Oligodendrocyte precursor cells','Pericytes')
 names(signatures) <- cell_type_name
 
-expr_matrix <- read.fst(expr_file)
+expr_matrix <- read.csv(expr_file)
 rownames(expr_matrix) <- NULL
-expr_matrix <- column_to_rownames(expr_matrix, var = "X1")
+expr_matrix <- column_to_rownames(expr_matrix, var = "X")
 
 health.obj <- CreateSeuratObject(counts = expr_matrix, project = "healthy", min.cells = 3, min.features = 200)
 health.obj <- FindVariableFeatures(health.obj, selection.method = "vst", nfeatures = 2000)
