@@ -1,5 +1,5 @@
 ---
-title: "scREAD overlapping DEGs"
+title: "scREAD overlapping DEGs from multiple comparisons"
 author: "Cankun Wang"
 date: "`r format(Sys.time(), '%m/%d/%Y')`"
 output: 
@@ -18,24 +18,77 @@ library(tools)
 library(RVenn)
 library(rjson)
 
-# modify your directory
+# Please install DT package for interactive table
+# library(DT)
+
+# Critical: set your working directory below
 knitr::opts_knit$set(root.dir = "C:/Users/flyku/Documents/GitHub/scread-protocol/overlapping_genes")
 setwd("C:/Users/flyku/Documents/GitHub/scread-protocol/overlapping_genes")
 
 ```
 
+# Introduction
 
+This notebook is a section to the protocol, *Use of scREAD to Explore and Analyze Single-cell and Single-nucleus RNA-Seq data for Alzheimer’s Disease*
+
+If you have any questions or feedback regarding this notebook, please contact Cankun Wang <cankun.wang@osumc.edu>.
+
+## Outline 
+
+0. How to use this notebook
+1. Background
+2. Install dependencies and curate the data from scREAD
+3. Specify parameters settings 
+4. Interpret the result table
+
+## 0. How to use this notebook
+This notebook utilizes Google Colab , which is an interactive computational enviroment that combines live code, visualizations, and explanatory text. To run this notebook, you may first need to make a copy by choosing File > Save a Copy in Drive from the menu bar (may take a few moments to save).
+
+The notebook is organized into a series of cells. You can modify the R command and execute each cell as you would a Jupyter notebook/R notebook. To run all of the cells at once, choose **Runtime > Run all** from the menu bar.
+
+## 1. Background
+
+The notebook provide table to mainly answer the question:
+
+For all differentially expressed genes (DEGs) in Alzheimer’s Disease (AD) vs control datasets comparisons at a cell type of interest from scREAD, what genes are commanly ranked at top positions by the log-foldchanges? 
+
+## 2. Install dependencies and curate the data from scREAD
+
+First, let's install some necessary dependencies in this project, this should take about **10 minutes**:
+
+install.packages('RVenn', repos='http://cran.rstudio.com/')
+
+install.packages('rlist', repos='http://cran.rstudio.com/')
 
 ```{r,echo=F,eval=T,message=F,warning=F,error=F}
 #### 
 #
 load("scread_db.rdata")
-source("overlap_functions.R")
-####
-#de_meta <- de_meta[1:317,]
-#dataset <- dataset[1:73,]
+#source("overlap_functions.R")
+
 #save.image("scread_db.rdata")
 ```
+
+## 3. Specify parameters settings 
+
+To calculate overlapping genes, these parameters are needed:
+
+- The number of top genes in each AD vs control DE results (default=100)
+
+- Species (default=Human)
+
+- Brain region (e.g,Entorhinal Cortex)
+
+- DE direction (e.g, up)
+
+- Overlap threshold (for example, a gene is an overlapping gene if a should at least appeared 3 times in total 4 comparisons. Here the threshold=3)
+
+By default two tables will be generated: 
+
+1. The overlapping genes in the selected brain region
+
+2. The detailed information, including rankings, log-foldchange, dataset source information from the overlapping genes
+
 
 
 ```{r,echo=F,eval=T,message=FALSE,warning=F}
@@ -213,5 +266,9 @@ DT::datatable(res$rank, filter = "top")
 # Session Infomation
 
 ```{r}
+
+#rm(mydb)
+#rm(de_query)
+save.image("scread_db1.rdata")
 sessionInfo()
 ```
