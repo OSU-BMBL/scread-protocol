@@ -20,8 +20,8 @@ suppressPackageStartupMessages(library(Polychrome))
 suppressPackageStartupMessages(library(ggplot2))
 suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(harmony))
-#suppressPackageStartupMessages(library(cowplot))
-#suppressPackageStartupMessages(library(future))
+suppressPackageStartupMessages(library(cowplot))
+suppressPackageStartupMessages(library(future))
 
 
 ## Do not use it, not working in OSC clusters
