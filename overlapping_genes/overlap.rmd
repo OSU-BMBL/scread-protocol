@@ -61,12 +61,21 @@ install.packages('RVenn', repos='http://cran.rstudio.com/')
 install.packages('rlist', repos='http://cran.rstudio.com/')
 
 ```{r,echo=F,eval=T,message=F,warning=F,error=F}
-#### 
-#
-load("scread_db.rdata")
-#source("overlap_functions.R")
 
-#save.image("scread_db.rdata")
+
+tryCatch({
+  load("scread_db.rdata")
+}, error = {
+  load(
+    url(
+      'https://bmbl.bmi.osumc.edu/downloadFiles/scread/protocol/scread_db.rdata'
+    )
+  )
+})
+
+
+source("overlap_functions.R")
+
 ```
 
 ## 3. Specify parameters settings 
