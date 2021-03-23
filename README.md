@@ -10,10 +10,10 @@ If you have any questions or feedback regarding this notebook, please contact Ca
 
 ## How to use the protocols?
 
-- Calculating overlapping DEGs from the same cell type across datasets (Optional step 6 in the manuscript)
+- Calculating overlapping DEGs from the same cell type across datasets (Optional section 6 in the manuscript)
   - Run /overlapping_genes/overlap.rmd locally
   - Use Google Colab version: [https://colab.research.google.com/drive/1lInXa6jD4yc7RGJc0EWDfy5NNoXT1qye?usp=sharing](https://colab.research.google.com/drive/1lInXa6jD4yc7RGJc0EWDfy5NNoXT1qye?usp=sharing) 
-- Optional step 7: Running scREAD backend analysis workflow locally (Optional step 7 in the manuscript)
+- Optional section 7: Running scREAD backend analysis workflow locally (Optional section 7 in the manuscript)
   - open [workflow readme](https://github.com/OSU-BMBL/scread-protocol/tree/master/workflow)
 
 ## Directory structure
