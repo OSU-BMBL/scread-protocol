@@ -31,6 +31,8 @@ If you have any questions or feedback regarding this notebook, please contact Ca
   - example_control.csv. The example control dataset.
   - example_disease.csv. The example disease dataset.
 
-## About
+## Authors
 
-Author: [Cankun Wang](https://github.com/Wang-Cankun)
+- [Cankun Wang](https://github.com/Wang-Cankun)
+- [Yujia Xiang](https://github.com/Candlelight-XYJ)
+
