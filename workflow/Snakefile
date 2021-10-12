@@ -1,0 +1,21 @@
+rule all:
+    input: 
+        "build_control_atlas.R", "transfer_cell_type.R", "run_analysis.R"
+
+rule control_atlas:
+    input: "build_control_atlas.R"
+    params: ".", "example_control.csv", "control_example"
+    output: "control_example.rds"
+    shell: "Rscript {input} {params}"
+
+rule transfer_atlas:
+    input: "transfer_cell_type.R"
+    params: ".", "control_example.rds", "example_disease.csv"
+    output: "disease_example.rds"
+    shell: "Rscript {input} {params}"
+
+rule data_analysis:
+    input: "run_analysis.R"
+    params: ".", "control_example.rds ", "control_example.rds", "disease_example.rds"
+    output: ""
+    shell: "Rscript {input} {params}"
