@@ -1,21 +1,33 @@
 rule all:
-    input: 
-        "build_control_atlas.R", "transfer_cell_type.R", "run_analysis.R"
+    input:
+        "./de/control_example_de_cts.csv"
 
 rule control_atlas:
-    input: "build_control_atlas.R"
-    params: ".", "example_control.csv", "control_example"
-    output: "control_example.rds"
-    shell: "Rscript {input} {params}"
+    input: 
+        "example_control.csv"
+    params: 
+        wd = ".", name = "control_example"
+    output: 
+        "control_example.rds"
+    shell: 
+        "Rscript build_control_atlas.R {params.wd} {input} {params.name}"
 
 rule transfer_atlas:
-    input: "transfer_cell_type.R"
-    params: ".", "control_example.rds", "example_disease.csv"
-    output: "disease_example.rds"
-    shell: "Rscript {input} {params}"
+    input: 
+        "control_example.rds", "example_disease.csv"
+    params: 
+        wd = ".", name = "disease_example"
+    output: 
+        "disease_example.rds"
+    shell: 
+        "Rscript transfer_cell_type.R {params.wd} {input} {params.name}"
 
 rule data_analysis:
-    input: "run_analysis.R"
-    params: ".", "control_example.rds ", "control_example.rds", "disease_example.rds"
-    output: ""
-    shell: "Rscript {input} {params}"
+    input: 
+        "disease_example.rds"
+    params: 
+        wd = ".", name1 = "control_example", name2 = "disease_example"
+    output: 
+        "./de/control_example_de_cts.csv"
+    shell: 
+        "Rscript run_analysis.R {params.wd} {params.name1} {params.name2}"
