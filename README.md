@@ -3,7 +3,7 @@
 
 This is the repository for the *STAR protocols* manuscript: **Use of scREAD to Explore and Analyze Single-cell and Single-nucleus RNA-Seq data for Alzheimer’s Disease**. 
 
-The protocol is baed on **scREAD** (single-cell RNA-Seq database for Alzheimer's Disease). It is a first-of-its-kind database to provide comprehensive analysis results of all the existing single-cell RNA-Seq and single-nucleus RNA-Seq data of Alzheimer's Disease in the public domain. The database is freely available at: [https://bmbls.bmi.osumc.edu/scread/](https://bmbls.bmi.osumc.edu/scread/)
+The protocol is baed on **scREAD** (single-cell RNA-Seq database for Alzheimer's Disease). It is a first-of-its-kind database to provide comprehensive analysis results of all the existing single-cell RNA-Seq and single-nucleus RNA-Seq data of Alzheimer's Disease in the public domain. The database is freely available at: [http://osubmi.com/scread](http://osubmi.com/scread/)
 
 The original scREAD paper was published in *iScience*: [scREAD: A Single-Cell RNA-Seq Database for Alzheimer's Disease](https://www.sciencedirect.com/science/article/pii/S2589004220309664)
 
