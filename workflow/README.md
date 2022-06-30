@@ -1,4 +1,4 @@
-## How to run scREAD backend workflow locally
+## How to run ssREAD single cell RNA-seq backend workflow locally
 
 The workflow in R can be found in https://github.com/OSU-BMBL/scread-protocol/tree/master/workflow, the folder contains the following files:
 1.	custom_marker.csv. A manually created marker gene list file used for identified cell types.
