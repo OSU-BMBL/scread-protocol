@@ -1,5 +1,5 @@
 # Goal
-# This document aims to run Seurat analysis workflow, and export tables in scREAD database format.
+# This document aims to run Seurat analysis workflow, and export tables in ssREAD database format.
 
 # Important!! Install MAST first
 #BiocManager::install("MAST")
