@@ -28,7 +28,7 @@ data_id <- args[3] # unique data id
 load_test_data <- function(){
   # This function is used for testing, set wd to your working directory
   rm(list = ls(all = TRUE))
-  wd <- 'C:/Users/flyku/Documents/GitHub/scread-protocol/workflow'
+  wd <- 'C:/Users/flyku/Documents/GitHub/ssread-protocol/workflow'
   expr_file = "example_control.csv"
   data_id <- 'control_example'
 }

@@ -39,7 +39,7 @@ disease_data_id <- args[4] # disease data ID
 load_test_data <- function(){
   # This function is used for testing, set wd to your working directory
   rm(list = ls(all = TRUE))
-  wd <- 'C:/Users/flyku/Documents/GitHub/scread-protocol/workflow'
+  wd <- 'C:/Users/flyku/Documents/GitHub/ssread-protocol/workflow'
   control_filename <- "control_example.rds"
   disease_filename <- "example_disease.csv"
   disease_data_id <- "disease_example"

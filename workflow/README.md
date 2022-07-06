@@ -1,11 +1,11 @@
 ## How to run ssREAD single cell RNA-seq backend workflow locally
 
-The workflow in R can be found in https://github.com/OSU-BMBL/scread-protocol/tree/master/workflow, the folder contains the following files:
+The workflow in R can be found in https://github.com/OSU-BMBL/ssread-protocol/tree/master/workflow, the folder contains the following files:
 1.	custom_marker.csv. A manually created marker gene list file used for identified cell types.
 2.	functions.R. Visualization functions used in R.
 3.	build_control_atlas.R: build control cells atlas Seurat object from count matrix file.
 4.	transfer_cell_type.R: filter out control-like cells in disease dataset
-5.	run_analysis.R: run analysis workflow, and export tables in scREAD database format.
+5.	run_analysis.R: run analysis workflow, and export tables in ssREAD database format.
 
 ### Build control atlas 
 1.	Goal: Build the control atlas file from raw gene expression matrix.
@@ -58,4 +58,4 @@ Rscript run_analysis.R PATH_TO_WD control_example disease_example
 -	/subcluster_dimension. UMAP coordinates for each sub-clusters in two datasets.
 
 
-More information about the pipeline can be found in [What is the scREAD overall pipeline?](https://bmbls.bmi.osumc.edu/scread/help/faq#what-is-the-scread-overall-pipeline%3F)
+More information about the pipeline can be found in [What is the ssREAD overall pipeline?](https://bmblx.bmi.osumc.edu/ssread/help/faq#what-is-ssread%E2%80%99s-spatial-transcriptomics-pipeline%3F)
